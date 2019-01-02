@@ -63,4 +63,5 @@ simulation/
 timing/
 testbench/
 *_sim/
+output_files/
 

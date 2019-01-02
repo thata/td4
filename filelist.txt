@@ -1,3 +1,5 @@
 platform_setup.tcl
 filelist.txt
 DE10_LITE_Golden_Top.v
+cpu.v
+test_rom.v

@@ -127,13 +127,37 @@ module DE10_LITE_Golden_Top(
 //  REG/WIRE declarations
 //=======================================================
 
+`define PAR_CLOCK 50000000
 
+wire clk;
+wire n_reset;
+wire [3:0] address;
+wire [7:0] dout;
+wire [3:0] port_in;
+wire [3:0] port_out;
+
+// clock
+reg [26:0] counter;
+wire td4_CLOCK;
+assign td4_CLOCK = counter < `PAR_CLOCK / 2;
 
 
 //=======================================================
 //  Structural coding
 //=======================================================
 
+cpu cpu(td4_CLOCK, n_reset, address, dout, port_in, port_out);
+test_rom rom(address, dout);
 
+assign LEDR[3:0] = port_out;
+assign port_in = GPIO[3:0];
+assign clk = MAX10_CLK1_50;
+assign n_reset = KEY[1];
+
+
+always @(posedge clk or negedge n_reset) begin
+  if (!n_reset) counter <= 0;
+  else counter <= counter < `PAR_CLOCK ? counter + 1 : 0;
+end
 
 endmodule
